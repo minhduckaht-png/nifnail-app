@@ -166,7 +166,7 @@ function download(blob,name){const url=URL.createObjectURL(blob),a=document.crea
 function restore(file){const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x.categories)||!Array.isArray(x.services))throw 0;db=x;save();render();alert('Đã khôi phục bảng giá.');}catch(e){alert('File JSON không đúng định dạng.');}};r.readAsText(file);}
 $('addCategory').onclick=addCategory;$('addService').onclick=addService;$('categoryFilter').onchange=render;$('discount').oninput=renderCart;
 $('clearQuote').onclick=()=>{if(confirm('Làm mới các mục trong báo giá?')){cart=[];$('customer').value='';$('staff').value='';$('quoteNote').value='';$('discount').value=0;renderCart();}};
-$('exportBtn').onclick=()=>window.print();$('backupBtn').onclick=exportBackup;$('restoreBtn').onclick=()=>$('restoreFile').click();$('restoreFile').onchange=e=>{if(e.target.files[0])restore(e.target.files[0]);e.target.value='';};
+$('exportBtn').onclick=()=>{window.focus();setTimeout(()=>window.print(),500);};
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));['quote','catalog','manage'].forEach(id=>$(id).classList.toggle('hidden',id!==b.dataset.tab));});
 $('quoteDate').value=new Date().toISOString().slice(0,10);
 load();render();
