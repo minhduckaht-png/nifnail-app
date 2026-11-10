@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#241d22">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Nifnail Báo Giá">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Nifnail Studio – Báo giá</title>
+<style>
+:root{--ink:#241d22;--muted:#82777e;--rose:#b8798d;--rose2:#f5e8ed;--line:#eadfe4;--bg:#faf7f8;--white:#fff;--green:#277653}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+header{background:var(--ink);color:white;padding:22px 18px 18px;text-align:center}
+.brand{font-family:Georgia,serif;letter-spacing:2px;font-size:24px;font-weight:600}.sub{font-size:10px;letter-spacing:2.5px;color:#e9cbd6;margin-top:5px}
+nav{display:flex;gap:8px;padding:12px 14px;background:white;position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line)}
+nav button{flex:1;border:0;background:#f5eff2;color:var(--ink);padding:11px 7px;border-radius:12px;font-weight:650;font-size:13px}
+nav button.active{background:var(--ink);color:white}
+main{max-width:680px;margin:auto;padding:16px 14px 40px}.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:14px;box-shadow:0 3px 14px #3c1d2b08}
+h2{font-size:16px;margin:0 0 12px}.muted{color:var(--muted);font-size:12px}.field{margin-bottom:11px}label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;background:white;color:var(--ink);font:inherit;font-size:14px;min-width:0}
+textarea{min-height:64px;resize:vertical}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}
+button{font:inherit;cursor:pointer}.btn{border:0;border-radius:11px;padding:11px 13px;background:var(--ink);color:white;font-weight:650}.btn.secondary{background:var(--rose2);color:var(--ink)}.btn.outline{background:white;color:var(--ink);border:1px solid var(--line)}.btn.danger{background:#fff0f0;color:#a33}
+.category{font-size:13px;font-weight:750;color:var(--rose);margin:15px 0 8px}
+.service{display:flex;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid #f2eaee}.service:last-child{border:0}
+.service-info{flex:1;min-width:0}.service-name{font-size:14px;font-weight:650}.service-price{font-size:12px;color:var(--muted);margin-top:3px}
+.service button{flex:0 0 auto}
+.empty{text-align:center;color:var(--muted);padding:24px 10px;font-size:13px}
+.lineitem{display:grid;grid-template-columns:1fr auto;gap:8px;padding:11px 0;border-bottom:1px solid #f2eaee;align-items:center}
+.lineitem .desc{font-size:14px;font-weight:650}.lineitem .small{font-size:12px;color:var(--muted);margin-top:3px}.lineitem .amount{text-align:right;font-weight:700;font-size:14px}.lineitem .remove{display:block;margin:5px 0 0 auto;border:0;background:none;color:#a33;font-size:12px;padding:0}
+.totalrow{display:flex;justify-content:space-between;align-items:center;padding-top:13px}.total{font-size:23px;font-weight:800;color:var(--green)}
+.hidden{display:none!important}.hint{background:#fff8e9;border-radius:10px;padding:10px;font-size:12px;color:#765b27;line-height:1.5}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.actions .btn{flex:1}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:8px 0 24px}
+@media print{body{background:white;color:#111}.no-print,header,nav,#catalog,#manage,.screen-title{display:none!important}main{padding:0;max-width:none}.panel{border:0;box-shadow:none;padding:0;margin:0 0 12px}#quote{display:block!important}.print-head{display:block!important;text-align:center;margin-bottom:22px}.print-head h1{font-family:Georgia,serif;letter-spacing:2px;margin:0}.print-head p{font-size:11px;letter-spacing:2px;margin:5px 0 18px}input,textarea{border:0;padding:0}.lineitem{border-bottom:1px solid #ddd}.total{color:#111}.remove{display:none!important}.print-meta{font-size:13px;line-height:1.7}}
+.print-head{display:none}
+/* Quote image capture layout */
+.image-export-root{background:#fff!important;color:#241d22!important;width:760px!important;max-width:none!important;padding:28px!important;box-sizing:border-box!important;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important}
+.image-export-root .print-head{display:block!important;text-align:center;margin-bottom:24px}
+.image-export-root .print-head h1{font-family:Georgia,serif;letter-spacing:2px;margin:0;font-size:26px}
+.image-export-root .print-head p{font-size:12px;letter-spacing:2px;margin:6px 0 18px}
+.image-export-root .panel{border:0!important;box-shadow:none!important;border-radius:0!important;padding:8px 0!important;margin:0 0 16px!important}
+.image-export-root .no-print{display:none!important}
+.image-export-root .lineitem{border-bottom:1px solid #ddd!important}
+.image-export-root .total{color:#111!important}
+.image-export-root .image-field-value{font-size:14px;line-height:1.5;white-space:pre-wrap;min-height:20px;color:#241d22}
+.image-export-root .image-label{display:block;font-size:12px;color:#82777e;margin-bottom:4px}
+.image-export-root .image-field{margin-bottom:10px}
+.image-export-root .booking-footer{border-top:1px solid #eadfe4;margin-top:22px;padding-top:18px;color:#241d22;font-size:13px;line-height:1.55}
+.image-export-root .booking-footer h2{font-size:17px;text-align:center;letter-spacing:1px;margin:0 0 10px}
+.image-export-root .booking-footer p{margin:7px 0}
+.image-export-root .booking-footer .warning{font-weight:800;color:#9b354b}
+.image-export-root .booking-footer .hotline{text-align:center;font-weight:800;margin-top:12px}
+.image-export-root .payment-title{text-align:center;font-weight:800;letter-spacing:1px;margin:18px 0 8px}
+.image-export-root .payment-qr{display:block;width:230px;height:auto;margin:8px auto 0}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+<header><div class="brand">NIFNAIL STUDIO</div><div class="sub">BEAUTY • NAIL • CARE</div></header>
+<nav class="no-print"><button class="active" data-tab="quote">Báo giá</button><button data-tab="catalog">Dịch vụ</button><button data-tab="manage">Quản lý</button></nav>
+<main>
+<section id="quote">
+ <div class="print-head"><h1>NIFNAIL STUDIO</h1><p>BẢNG BÁO GIÁ DỊCH VỤ</p></div>
+ <div class="panel"><h2>Thông tin khách hàng</h2><div class="field"><label>Tên khách hàng</label><input id="customer" placeholder="Nhập tên khách (không bắt buộc)"></div><div class="row"><div class="field"><label>Ngày báo giá</label><input id="quoteDate" type="date"></div><div class="field"><label>Nhân viên</label><input id="staff" placeholder="Tên nhân viên"></div></div><div class="field"><label>Ghi chú</label><textarea id="quoteNote" placeholder="Ví dụ: mẫu nail, độ dài móng..."></textarea></div></div>
+ <div class="panel no-print"><h2>Chọn dịch vụ</h2><div class="field"><label>Lọc theo nhóm</label><select id="categoryFilter"><option value="">Tất cả nhóm dịch vụ</option></select></div><div id="servicePicker" class="muted">Chưa có dịch vụ. Anh vào mục Quản lý để thêm nhóm và giá.</div></div>
+ <div class="panel"><h2>Chi tiết báo giá</h2><div class="muted no-print">Các dịch vụ anh chọn sẽ xuất hiện ở đây.</div><div id="quoteItems"><div class="empty">Chưa chọn dịch vụ nào</div></div><div class="field no-print" style="margin-top:14px"><label>Giảm giá (đồng)</label><input id="discount" type="number" min="0" step="1000" value="0" inputmode="numeric"></div><div class="totalrow"><strong>Tạm tính</strong><strong id="subtotal">0đ</strong></div><div class="totalrow"><strong>Giảm giá</strong><strong id="discountText">0đ</strong></div><div class="totalrow"><strong>TỔNG CỘNG</strong><div class="total" id="grandTotal">0đ</div></div></div>
+ <div class="panel no-print"><div class="actions"><button class="btn" id="exportBtn" type="button">Xuất ảnh báo giá</button><button class="btn secondary" id="clearQuote" type="button">Làm mới báo giá</button></div><p class="muted" style="margin-bottom:0">Ảnh PNG sẽ được tạo ngay trong app và mở bảng chia sẻ của iPhone.</p></div>
+</section>
+<section id="catalog" class="hidden"><div class="panel"><h2>Danh mục dịch vụ</h2><p class="muted">Danh sách giá được lưu trên iPhone này. Anh có thể cập nhật bất cứ lúc nào.</p><div id="catalogList"><div class="empty">Chưa có dịch vụ nào.</div></div></div></section>
+<section id="manage" class="hidden"><div class="panel"><h2>Thêm nhóm dịch vụ</h2><div class="field"><label>Tên nhóm</label><input id="newCategory" placeholder="Ví dụ: Sơn gel, Chăm sóc móng"></div><button class="btn" id="addCategory">Thêm nhóm</button></div><div class="panel"><h2>Thêm dịch vụ / hạng mục</h2><div class="field"><label>Tên dịch vụ</label><input id="newName" placeholder="Ví dụ: Sơn gel màu"></div><div class="row"><div class="field"><label>Nhóm dịch vụ</label><select id="newGroup"><option value="">Chọn nhóm</option></select></div><div class="field"><label>Giá (đồng)</label><input id="newPrice" type="number" min="0" step="1000" placeholder="120000" inputmode="numeric"></div></div><button class="btn" id="addService">Lưu dịch vụ</button></div><div class="panel"><h2>Sao lưu dữ liệu</h2><div class="actions"><button class="btn secondary" id="backupBtn">Xuất bản sao JSON</button><button class="btn outline" id="restoreBtn">Nhập JSON</button><input type="file" id="restoreFile" accept=".json,application/json" class="hidden"></div><p class="muted">Nên sao lưu sau khi cập nhật bảng giá. Dữ liệu hiện lưu trên thiết bị, chưa tự đồng bộ sang máy khác.</p></div></section>
+<footer>NIFNAIL STUDIO · Bảng báo giá nội bộ</footer>
+</main>
+<script>
+const KEY='nifnail-quote-v1';
+let db={categories:[],services:[]},cart=[];
+const $=id=>document.getElementById(id);
+const money=n=>new Intl.NumberFormat('vi-VN').format(Math.max(0,Number(n)||0))+'đ';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function save(){localStorage.setItem(KEY,JSON.stringify(db));}
+function load(){try{const x=JSON.parse(localStorage.getItem(KEY)||'{}');db={categories:Array.isArray(x.categories)?x.categories:[],services:Array.isArray(x.services)?x.services:[]};}catch(e){}}
+function render(){const filter=$('categoryFilter').value;$('categoryFilter').innerHTML='<option value="">Tất cả nhóm dịch vụ</option>'+db.categories.map(c=>`<option ${filter===c?'selected':''} value="${esc(c)}">${esc(c)}</option>`).join('');$('newGroup').innerHTML='<option value="">Chọn nhóm</option>'+db.categories.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');const groups=db.categories.filter(c=>!filter||c===filter);$('servicePicker').innerHTML=db.services.filter(s=>groups.includes(s.category)).length?groups.map(c=>{const arr=db.services.filter(s=>s.category===c);if(!arr.length)return '';return `<div class="category">${esc(c)}</div>`+arr.map(s=>`<div class="service"><div class="service-info"><div class="service-name">${esc(s.name)}</div><div class="service-price">${money(s.price)}</div></div><button class="btn secondary" onclick="addToCart('${s.id}')">＋ Chọn</button></div>`).join('');}).join(''):'<div class="empty">Chưa có dịch vụ trong nhóm này. Anh vào Quản lý để thêm.</div>';$('catalogList').innerHTML=db.services.length?db.categories.map(c=>{const arr=db.services.filter(s=>s.category===c);if(!arr.length)return '';return `<div class="category">${esc(c)}</div>`+arr.map(s=>`<div class="service"><div class="service-info"><div class="service-name">${esc(s.name)}</div><div class="service-price">${money(s.price)}</div></div><button class="btn outline" onclick="editService('${s.id}')">Sửa</button><button class="btn danger" onclick="deleteService('${s.id}')">Xóa</button></div>`).join('');}).join(''):'<div class="empty">Chưa có dịch vụ nào.</div>';renderCart();}
+function addToCart(id){const s=db.services.find(x=>x.id===id);if(!s)return;cart.push({...s,uid:(crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()))});renderCart();}
+function removeCart(uid){cart=cart.filter(x=>x.uid!==uid);renderCart();}
+function renderCart(){$('quoteItems').innerHTML=cart.length?cart.map(x=>`<div class="lineitem"><div><div class="desc">${esc(x.name)}</div><div class="small">${esc(x.category)} · ${money(x.price)}</div></div><div class="amount">${money(x.price)}<button class="remove no-print" onclick="removeCart('${x.uid}')">Bỏ mục này</button></div></div>`).join(''):'<div class="empty">Chưa chọn dịch vụ nào</div>';const sub=cart.reduce((a,x)=>a+Number(x.price||0),0),disc=Math.min(sub,Math.max(0,Number($('discount').value)||0));$('subtotal').textContent=money(sub);$('discountText').textContent=money(disc);$('grandTotal').textContent=money(sub-disc);}
+function addCategory(){const v=$('newCategory').value.trim();if(!v)return alert('Anh nhập tên nhóm trước nhé.');if(db.categories.includes(v))return alert('Nhóm này đã có rồi.');db.categories.push(v);$('newCategory').value='';save();render();}
+function addService(){const name=$('newName').value.trim(),category=$('newGroup').value,price=Number($('newPrice').value);if(!name||!category||$('newPrice').value===''||price<0)return alert('Anh nhập đủ tên, nhóm và giá nhé.');db.services.push({id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())),name,category,price});$('newName').value='';$('newPrice').value='';save();render();alert('Đã lưu dịch vụ.');}
+function editService(id){const s=db.services.find(x=>x.id===id);if(!s)return;const n=prompt('Tên dịch vụ:',s.name);if(n===null)return;const p=prompt('Giá mới (đồng):',s.price);if(p===null)return;const price=Number(p);if(!n.trim()||!Number.isFinite(price)||price<0)return alert('Thông tin chưa hợp lệ.');s.name=n.trim();s.price=price;save();render();}
+function deleteService(id){if(!confirm('Xóa dịch vụ này khỏi bảng giá?'))return;db.services=db.services.filter(x=>x.id!==id);save();render();}
+function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);}
+function exportBackup(){const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});download(blob,'nifnail-bang-gia-backup.json');}
+function restore(file){const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x.categories)||!Array.isArray(x.services))throw 0;db=x;save();render();alert('Đã khôi phục bảng giá.');}catch(e){alert('File JSON không đúng định dạng.');}};r.readAsText(file);}
+function cloneForImage(){
+ const source=$('quote');const clone=source.cloneNode(true);
+ clone.classList.add('image-export-root');clone.style.position='fixed';clone.style.left='-10000px';clone.style.top='0';clone.style.zIndex='-1';clone.style.display='block';
+ clone.querySelectorAll('.no-print').forEach(el=>el.remove());
+ clone.querySelectorAll('input,textarea,select').forEach(el=>{
+  const wrap=document.createElement('div');wrap.className='image-field';
+  const label=el.closest('.field')?.querySelector('label');
+  if(label){const l=document.createElement('span');l.className='image-label';l.textContent=label.textContent;wrap.appendChild(l);label.remove();}
+  const val=document.createElement('div');val.className='image-field-value';
+  if(el.tagName==='SELECT'){val.textContent=el.selectedOptions[0]?.textContent||'';}
+  else if(el.type==='date'&&el.value){const p=el.value.split('-');val.textContent=`${p[2]}/${p[1]}/${p[0]}`;}
+  else{val.textContent=el.value||'—';}
+  wrap.appendChild(val);el.replaceWith(wrap);
+ });
+ const info=document.createElement('div');info.className='booking-footer';
+ info.innerHTML=`
+  <h2>THÔNG TIN ĐẶT LỊCH</h2>
+  <p>Tiệm gửi bạn thông tin book lịch, khách vui lòng đọc kỹ để không mất lòng hai bên ạ 🥰</p>
+  <p>❤️ Khách book lịch vui lòng chuyển khoản cọc trước <strong>50.000đ/khách</strong> để giữ lịch.</p>
+  <p>❤️ Số tiền cọc sẽ được tiệm trừ vào bill của khách khi khách thanh toán dịch vụ của tiệm.</p>
+  <p class="warning">🆘 LƯU Ý: Tiệm sẽ KHÔNG HOÀN CỌC nếu khách huỷ lịch trong ngày.</p>
+  <p>NẾU KHÁCH HUỶ LỊCH vui lòng liên hệ báo huỷ trước ÍT NHẤT 24h để KHÔNG MẤT CỌC.</p>
+  <p class="hotline">Nếu KHÔNG nhận được “PHẢN HỒI” từ tiệm vui lòng gọi HOTLINE: 079 9053 776</p>
+  <div class="payment-title">QUÉT MÃ ĐỂ CHUYỂN KHOẢN</div>
+  <img class="payment-qr" crossorigin="anonymous" src="https://img.vietqr.io/image/970407-88266626868-compact2.png?accountName=HO%20KINH%20DOANH%20TIEM%20LAM%20MONG%20NI" alt="Mã QR chuyển khoản Techcombank">
+ `;
+ clone.appendChild(info);document.body.appendChild(clone);return clone;
+}
+function canvasToBlob(canvas){return new Promise((resolve,reject)=>{canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Không tạo được ảnh PNG')), 'image/png');});}
+async function exportQuote(){
+ const btn=$('exportBtn');
+ if(!cart.length){alert('Anh hãy chọn ít nhất một dịch vụ trước khi xuất ảnh nhé.');return;}
+ if(!window.html2canvas){alert('Chưa tải được thư viện tạo ảnh. Anh kiểm tra kết nối mạng rồi thử lại nhé.');return;}
+ btn.disabled=true;btn.textContent='Đang tạo ảnh…';let clone=null;
+ try{
+  clone=cloneForImage();
+  const qr=clone.querySelector('.payment-qr');
+  if(qr&&!qr.complete){await new Promise((resolve,reject)=>{qr.onload=resolve;qr.onerror=reject;setTimeout(()=>reject(new Error('Không tải được mã QR')),10000);});}
+  if(qr&&qr.naturalWidth===0)throw new Error('Mã QR không tải được');
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  const canvas=await html2canvas(clone,{scale:2,backgroundColor:'#ffffff',useCORS:true,allowTaint:false,logging:false,windowWidth:820});
+  const blob=await canvasToBlob(canvas);
+  const stamp=new Date().toISOString().slice(0,10);
+  const fileName=`Nifnail-Bao-gia-${stamp}.png`;
+  const file=new File([blob],fileName,{type:'image/png'});
+  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+   await navigator.share({files:[file],title:'Báo giá Nifnail Studio'});
+  }else{
+   download(blob,fileName);
+   alert('Đã tạo ảnh PNG. Anh mở mục Tải về trong ứng dụng Tệp để xem nhé.');
+  }
+ }catch(err){
+  if(err&&err.name==='AbortError'){return;}
+  console.error('Image export error',err);
+  alert('Chưa xuất được ảnh. Anh kiểm tra mạng và thử lại nhé. Nếu QR không tải được, báo em để em đổi cách nhúng QR.');
+ }finally{
+  if(clone)clone.remove();
+  btn.disabled=false;btn.textContent='Xuất ảnh báo giá';
+ }
+}
+$('addCategory').onclick=addCategory;$('addService').onclick=addService;$('categoryFilter').onchange=render;$('discount').oninput=renderCart;$('clearQuote').onclick=()=>{if(confirm('Làm mới các mục trong báo giá?')){cart=[];$('customer').value='';$('staff').value='';$('quoteNote').value='';$('discount').value=0;renderCart();}};$('exportBtn').addEventListener('click',exportQuote);$('backupBtn').onclick=exportBackup;$('restoreBtn').onclick=()=>$('restoreFile').click();$('restoreFile').onchange=e=>{if(e.target.files[0])restore(e.target.files[0]);e.target.value='';};document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));['quote','catalog','manage'].forEach(id=>$(id).classList.toggle('hidden',id!==b.dataset.tab));});$('quoteDate').value=new Date().toISOString().slice(0,10);load();render();if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=7').catch(()=>{});
+</script>
+</body></html>
