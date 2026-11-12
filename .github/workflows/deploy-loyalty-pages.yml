@@ -33,7 +33,7 @@ jobs:
       - name: Upload loyalty site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./loyalty
+          path: .
 
       - name: Deploy to GitHub Pages
         id: deployment
