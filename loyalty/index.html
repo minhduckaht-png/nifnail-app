@@ -139,7 +139,7 @@ if(selectedCustomer===id)showCustomer(id);
 function renderEarnResults(){
 const q=$('earnSearch').value.trim().toLowerCase();const list=q?db.customers.filter(c=>c.name.toLowerCase().includes(q)||c.phone.includes(q)):db.customers.slice(0,5);
 $('earnResults').innerHTML=list.length?list.map(c=>customerHTML(c)).join(''):'<div class="empty">Không tìm thấy khách hàng.</div>';
-$('earnResults').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{const c=customer(b.dataset.open);if(c&&confirm('Xác nhận '+c.name+' hoàn thành dịch vụ và cộng +1 điểm?'))earn(c.id)});
+$('earnResults').querySelectorAll('[data-open]').forEach(b=>{b.textContent='Tích +1';b.onclick=()=>{const c=customer(b.dataset.open);if(c&&confirm('Xác nhận '+c.name+' hoàn thành dịch vụ và cộng +1 điểm?'))earn(c.id)}});
 }
 $('earnSearch').oninput=renderEarnResults;
 function redeem(id){
