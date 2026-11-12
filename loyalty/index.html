@@ -50,6 +50,7 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}.notice{font-size:11p
 <div class="metric"><small>Lượt dịch vụ</small><strong id="mVisits">0</strong></div>
 </div>
 <div class="panel" style="margin-top:14px"><h2>Giao dịch gần đây</h2><div id="recent"></div></div>
+<div class="panel" id="backupReminder" style="margin-top:14px;border-color:#80683e"><h2 style="margin-bottom:8px">Nhắc sao lưu dữ liệu</h2><div id="backupStatus" class="muted" style="font-size:12px;line-height:1.6;margin-bottom:12px"></div><button class="btn full" id="backupNow">Sao lưu JSON ngay</button></div>
 <div class="notice">Dữ liệu đang lưu trên trình duyệt của thiết bị này. Hãy xuất bản sao định kỳ để tránh mất dữ liệu khi đổi máy hoặc xóa dữ liệu Safari.</div>
 </section>
 <section id="customers" class="tab">
@@ -87,6 +88,8 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}.notice{font-size:11p
 <div id="toast" class="toast hidden"></div>
 <script>
 const STORE='nifnail-loyalty-v1';
+const BACKUP_KEY='nifnail-loyalty-last-json-backup';
+const BACKUP_INTERVAL=3*24*60*60*1000;
 let db={customers:[],transactions:[]},selectedCustomer=null;
 const $=id=>document.getElementById(id);
 const money=n=>new Intl.NumberFormat('vi-VN',{maximumFractionDigits:0}).format(Number(n)||0)+' ₫';
@@ -100,7 +103,15 @@ function dateText(s){return new Date(s).toLocaleString('vi-VN',{dateStyle:'short
 function setTab(id){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));if(id==='customers')renderCustomers();if(id==='history')renderHistory()}
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
 function addTxn(c,kind,points,extra={}){db.transactions.unshift({id:uid(),customerId:c.id,kind,points,createdAt:new Date().toISOString(),...extra})}
+function renderBackupReminder(){
+const raw=localStorage.getItem(BACKUP_KEY),last=raw?new Date(raw).getTime():0,now=Date.now(),due=!last||!Number.isFinite(last)||now-last>=BACKUP_INTERVAL;
+$('backupReminder').style.borderColor=due?'#b77b45':'#665333';
+$('backupStatus').textContent=!last?'Anh chưa có lần sao lưu JSON nào được ghi nhận. Hãy sao lưu ngay để tạo bản dự phòng đầu tiên.':due?'Đã đủ 3 ngày kể từ lần sao lưu gần nhất. Anh nên xuất JSON ngay.':'Lần sao lưu gần nhất: '+dateText(raw)+'. Lần nhắc tiếp theo: '+dateText(new Date(last+BACKUP_INTERVAL).toISOString())+'.';
+$('backupNow').textContent=due?'Sao lưu JSON ngay':'Xuất JSON ngay';
+}
+$('backupNow').onclick=()=>$('exportData').click();
 function renderHome(){
+renderBackupReminder();
 $('mCustomers').textContent=db.customers.length;
 $('mToday').textContent=db.transactions.filter(t=>t.kind==='earn'&&new Date(t.createdAt).toDateString()===new Date().toDateString()).reduce((a,t)=>a+t.points,0);
 $('mBalance').textContent=db.customers.reduce((a,c)=>a+c.points,0);
@@ -169,7 +180,7 @@ $('historyList').innerHTML=list.length?list.map(txnHTML).join(''):'<div class="e
 $('historySearch').oninput=renderHistory;
 $('exportData').onclick=()=>{
 const blob=new Blob([JSON.stringify({...db,exportedAt:new Date().toISOString(),app:'Nifnail Loyalty'},null,2)],{type:'application/json'});
-const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='nifnail-loyalty-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href);toast('Đã xuất bản sao dữ liệu.');
+const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='nifnail-loyalty-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href);localStorage.setItem(BACKUP_KEY,new Date().toISOString());renderBackupReminder();toast('Đã xuất JSON và cập nhật lịch nhắc sau 3 ngày.');
 };
 $('importData').onclick=()=>$('importFile').click();
 $('importFile').onchange=async e=>{
