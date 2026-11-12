@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10100f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Nifnail Loyalty">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icon-192.png">
+<title>NIFNAIL LOYALTY</title>
+<style>
+:root{color-scheme:dark;--bg:#10100f;--panel:#1b1a18;--panel2:#24221e;--gold:#d2b276;--gold2:#f0dfb9;--muted:#a49b8b;--line:#3b3428;--red:#e28d83;--green:#9fc6a6}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f5f0e7;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+header{padding:22px 18px 15px;background:linear-gradient(145deg,#24211b,#10100f);border-bottom:1px solid var(--line)}
+.brand{font:600 25px Georgia,serif;letter-spacing:3px;color:var(--gold2)}.sub{font-size:9px;letter-spacing:2.3px;color:var(--muted);margin-top:5px}
+main{max-width:720px;margin:auto;padding:15px 14px 100px}
+nav{position:sticky;top:0;z-index:5;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:9px 10px;background:#151513;border-bottom:1px solid var(--line)}
+nav button{border:1px solid transparent;background:transparent;color:var(--muted);padding:10px 2px;border-radius:10px;font-size:11px;font-weight:700}
+nav button.active{background:#30291e;color:var(--gold2);border-color:#665333}
+h2{font:600 17px Georgia,serif;color:var(--gold2);margin:0 0 14px}.eyebrow{font-size:10px;letter-spacing:1.7px;color:var(--gold);font-weight:800;margin:4px 0 12px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:13px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:13px}.metric small{display:block;color:var(--muted);font-size:11px}.metric strong{display:block;color:var(--gold2);font-size:26px;margin-top:7px}
+input,textarea,select{width:100%;background:#11110f;color:#f5f0e7;border:1px solid #514735;border-radius:10px;padding:13px;font:inherit;font-size:14px;min-width:0;outline:none}input:focus,textarea:focus{border-color:var(--gold)}label{display:block;color:var(--muted);font-size:11px;margin:0 0 6px}.field{margin-bottom:12px}.row{display:flex;gap:9px}.row>*{flex:1;min-width:0}
+.btn{border:0;border-radius:11px;background:var(--gold);color:#17140f;font-weight:800;padding:13px 14px;font-size:13px}.btn.full{width:100%}.btn.secondary{background:#332c20;color:var(--gold2);border:1px solid #695637}.btn.ghost{background:transparent;color:var(--gold2);border:1px solid var(--line)}.btn.danger{background:#402522;color:#ffc5bb}.btn:disabled{opacity:.35}
+.item{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid #353027}.item:last-child{border:0}.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#342d20;color:var(--gold2);font:600 17px Georgia,serif;flex-shrink:0}.grow{flex:1;min-width:0}.name{font-weight:700;font-size:14px}.muted{color:var(--muted);font-size:11px;margin-top:4px}.points{color:var(--gold);font-weight:800;font-size:14px;text-align:right}
+.hidden{display:none!important}.empty{text-align:center;color:var(--muted);padding:25px 8px;font-size:13px;line-height:1.6}.badge{font-size:10px;color:var(--gold2);border:1px solid #665333;border-radius:20px;padding:4px 8px}
+.balance{font:600 39px Georgia,serif;color:var(--gold2);text-align:center;margin:10px}.balance-caption{text-align:center;color:var(--muted);font-size:11px}
+hr{border:0;border-top:1px solid var(--line);margin:14px 0}.notice{font-size:11px;line-height:1.6;color:var(--muted);background:#282319;border-radius:10px;padding:11px}.txn{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid #353027}.txn:last-child{border:0}.positive{color:var(--green);font-weight:800}.negative{color:var(--red);font-weight:800}
+.tab{display:none}.tab.active{display:block}.toast{position:fixed;left:16px;right:16px;bottom:22px;background:#e9d5ad;color:#1a1711;padding:13px 16px;border-radius:12px;font-size:13px;font-weight:700;z-index:20;box-shadow:0 8px 30px #0008}
+@media(min-width:600px){main{padding-top:22px}nav{max-width:720px;margin:auto}.grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header><div class="brand">NIFNAIL STUDIO</div><div class="sub">LOYALTY · MEMBERSHIP MANAGEMENT</div></header>
+<nav>
+<button class="active" data-tab="home">Tổng quan</button>
+<button data-tab="customers">Khách hàng</button>
+<button data-tab="earn">Tích điểm</button>
+<button data-tab="history">Lịch sử</button>
+</nav>
+<main>
+<section id="home" class="tab active">
+<div class="eyebrow">STUDIO OVERVIEW</div>
+<div class="grid">
+<div class="metric"><small>Tổng khách hàng</small><strong id="mCustomers">0</strong></div>
+<div class="metric"><small>Điểm tích hôm nay</small><strong id="mToday">0</strong></div>
+<div class="metric"><small>Tổng điểm đang lưu</small><strong id="mBalance">0</strong></div>
+<div class="metric"><small>Lượt dịch vụ</small><strong id="mVisits">0</strong></div>
+</div>
+<div class="panel" style="margin-top:14px"><h2>Giao dịch gần đây</h2><div id="recent"></div></div>
+<div class="notice">Dữ liệu đang lưu trên trình duyệt của thiết bị này. Hãy xuất bản sao định kỳ để tránh mất dữ liệu khi đổi máy hoặc xóa dữ liệu Safari.</div>
+</section>
+<section id="customers" class="tab">
+<div class="row" style="align-items:center;margin-bottom:12px"><h2 style="margin:0;flex:1">Khách hàng</h2><button class="btn" id="addCustomerOpen">＋ Thêm khách</button></div>
+<div class="field"><input id="customerSearch" placeholder="Tìm theo tên hoặc số điện thoại"></div>
+<div class="panel" id="customerList"></div>
+<div class="panel hidden" id="customerForm">
+<h2>Thêm khách hàng</h2>
+<div class="field"><label>HỌ VÀ TÊN</label><input id="newName" autocomplete="name" placeholder="Tên khách hàng"></div>
+<div class="field"><label>SỐ ĐIỆN THOẠI</label><input id="newPhone" inputmode="tel" autocomplete="tel" placeholder="09xxxxxxxx"></div>
+<div class="field"><label>GHI CHÚ (KHÔNG BẮT BUỘC)</label><textarea id="newNote" rows="2" placeholder="Thông tin thêm"></textarea></div>
+<div class="row"><button class="btn full" id="saveCustomer">Lưu khách hàng</button><button class="btn ghost full" id="cancelCustomer">Hủy</button></div>
+</div>
+<div class="panel hidden" id="customerDetail"></div>
+</section>
+<section id="earn" class="tab">
+<div class="eyebrow">SERVICE COMPLETION</div><h2>Tích điểm dịch vụ</h2>
+<div class="panel">
+<div class="field"><label>TÌM KHÁCH HÀNG</label><input id="earnSearch" placeholder="Nhập tên hoặc số điện thoại"></div>
+<div id="earnResults"><div class="empty">Tìm khách hàng để ghi nhận dịch vụ hoàn thành.</div></div>
+</div>
+<div class="notice">Mỗi lần khách hoàn thành một lượt dịch vụ, nhân viên xác nhận để cộng đúng +1 điểm. Kiểm tra đúng khách trước khi xác nhận.</div>
+</section>
+<section id="history" class="tab">
+<h2>Lịch sử giao dịch</h2>
+<div class="field"><input id="historySearch" placeholder="Lọc theo tên hoặc số điện thoại"></div>
+<div class="panel" id="historyList"></div>
+<div class="panel">
+<h2>Sao lưu dữ liệu</h2>
+<div class="row"><button class="btn secondary full" id="exportData">Xuất JSON</button><button class="btn ghost full" id="importData">Nhập JSON</button><input type="file" id="importFile" accept=".json,application/json" class="hidden"></div>
+<p class="muted">Bản sao gồm danh sách khách hàng, số dư điểm và toàn bộ lịch sử giao dịch.</p>
+</div>
+</section>
+</main>
+<div id="toast" class="toast hidden"></div>
+<script>
+const STORE='nifnail-loyalty-v1';
+let db={customers:[],transactions:[]},selectedCustomer=null;
+const $=id=>document.getElementById(id);
+const money=n=>new Intl.NumberFormat('vi-VN',{maximumFractionDigits:0}).format(Number(n)||0)+' ₫';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>crypto.randomUUID?crypto.randomUUID():'id-'+Date.now()+'-'+Math.random().toString(16).slice(2);
+function toast(s){$('toast').textContent=s;$('toast').classList.remove('hidden');setTimeout(()=>$('toast').classList.add('hidden'),2400)}
+function save(){localStorage.setItem(STORE,JSON.stringify(db));renderAll()}
+function load(){try{const x=JSON.parse(localStorage.getItem(STORE)||'{}');db={customers:Array.isArray(x.customers)?x.customers:[],transactions:Array.isArray(x.transactions)?x.transactions:[]}}catch(e){db={customers:[],transactions:[]}}}
+function customer(id){return db.customers.find(c=>c.id===id)}
+function dateText(s){return new Date(s).toLocaleString('vi-VN',{dateStyle:'short',timeStyle:'short'})}
+function setTab(id){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));if(id==='customers')renderCustomers();if(id==='history')renderHistory()}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+function addTxn(c,kind,points,extra={}){db.transactions.unshift({id:uid(),customerId:c.id,kind,points,createdAt:new Date().toISOString(),...extra})}
+function renderHome(){
+$('mCustomers').textContent=db.customers.length;
+$('mToday').textContent=db.transactions.filter(t=>t.kind==='earn'&&new Date(t.createdAt).toDateString()===new Date().toDateString()).reduce((a,t)=>a+t.points,0);
+$('mBalance').textContent=db.customers.reduce((a,c)=>a+c.points,0);
+$('mVisits').textContent=db.customers.reduce((a,c)=>a+c.visits,0);
+$('recent').innerHTML=db.transactions.length?db.transactions.slice(0,6).map(tx=>txnHTML(tx)).join(''):'<div class="empty">Chưa có giao dịch.</div>';
+}
+function customerHTML(c){return '<div class="item"><div class="avatar">'+esc(c.name.trim().charAt(0).toUpperCase())+'</div><div class="grow"><div class="name">'+esc(c.name)+'</div><div class="muted">'+esc(c.phone)+'</div></div><div class="points">'+c.points+' điểm</div><button class="btn secondary" data-open="'+c.id+'">Xem</button></div>'}
+function renderCustomers(){
+const q=$('customerSearch').value.trim().toLowerCase();
+const list=db.customers.filter(c=>c.name.toLowerCase().includes(q)||c.phone.includes(q));
+$('customerList').innerHTML=list.length?list.map(customerHTML).join(''):'<div class="empty">Chưa tìm thấy khách hàng.</div>';
+$('customerList').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>showCustomer(b.dataset.open));
+}
+function showCustomer(id){
+selectedCustomer=id;const c=customer(id);if(!c)return;
+$('customerDetail').classList.remove('hidden');
+$('customerDetail').innerHTML='<div class="row" style="align-items:center"><h2 style="flex:1;margin:0">Thẻ thành viên</h2><span class="badge">NIFNAIL</span></div><div class="balance">'+c.points+' điểm</div><div class="balance-caption">Mỗi điểm tương ứng 1% ưu đãi</div><hr><div class="name">'+esc(c.name)+'</div><div class="muted">'+esc(c.phone)+'</div><div class="muted">Số lượt dịch vụ: '+c.visits+'</div>'+(c.note?'<div class="muted">Ghi chú: '+esc(c.note)+'</div>':'')+'<hr><div class="row"><button class="btn full" id="detailEarn">＋ Tích 1 điểm</button><button class="btn secondary full" id="detailRedeem" '+(c.points<=5?'disabled':'')+'>Đổi điểm</button></div><hr><h2>Lịch sử của khách</h2>'+db.transactions.filter(t=>t.customerId===id).map(txnHTML).join('')+'<button class="btn ghost full" id="closeDetail">Đóng hồ sơ</button>';
+$('detailEarn').onclick=()=>earn(id);$('detailRedeem').onclick=()=>redeem(id);$('closeDetail').onclick=()=>{$('customerDetail').classList.add('hidden');selectedCustomer=null};
+}
+$('addCustomerOpen').onclick=()=>{$('customerForm').classList.remove('hidden');$('customerDetail').classList.add('hidden');$('newName').focus()};
+$('cancelCustomer').onclick=()=>{$('customerForm').classList.add('hidden')};
+$('saveCustomer').onclick=()=>{
+const name=$('newName').value.trim(),phone=$('newPhone').value.replace(/\D/g,'');
+if(!name||phone.length<9){toast('Nhập tên và số điện thoại hợp lệ.');return}
+if(db.customers.some(c=>c.phone===phone)){toast('Số điện thoại đã có trong danh sách.');return}
+db.customers.push({id:uid(),name,phone,note:$('newNote').value.trim(),points:0,visits:0,createdAt:new Date().toISOString()});
+$('newName').value=$('newPhone').value=$('newNote').value='';$('customerForm').classList.add('hidden');save();toast('Đã thêm khách hàng.');
+};
+$('customerSearch').oninput=renderCustomers;
+function earn(id){
+const c=customer(id);if(!c)return;
+if(!confirm('Xác nhận '+c.name+' đã hoàn thành dịch vụ? Cộng +1 điểm.'))return;
+c.points++;c.visits++;addTxn(c,'earn',1);save();toast('Đã cộng 1 điểm cho '+c.name);
+if(selectedCustomer===id)showCustomer(id);
+}
+function renderEarnResults(){
+const q=$('earnSearch').value.trim().toLowerCase();const list=q?db.customers.filter(c=>c.name.toLowerCase().includes(q)||c.phone.includes(q)):db.customers.slice(0,5);
+$('earnResults').innerHTML=list.length?list.map(c=>customerHTML(c)).join(''):'<div class="empty">Không tìm thấy khách hàng.</div>';
+$('earnResults').querySelectorAll('[data-open]').forEach(b=>{b.textContent='Tích +1';b.onclick=()=>{const c=customer(b.dataset.open);if(c&&confirm('Xác nhận '+c.name+' hoàn thành dịch vụ và cộng +1 điểm?'))earn(c.id)}});
+}
+$('earnSearch').oninput=renderEarnResults;
+function redeem(id){
+const c=customer(id);if(!c)return;
+if(c.points<=5){toast('Khách cần có trên 5 điểm mới được đổi.');return}
+const raw=prompt('Khách có '+c.points+' điểm. Nhập số điểm muốn đổi (từ 6 trở lên):','6');
+if(raw===null)return;const p=Number.parseInt(raw,10);
+if(!Number.isInteger(p)||p<=5||p>c.points||p>100){toast('Số điểm đổi phải từ 6 đến '+Math.min(c.points,100)+'.');return}
+const billRaw=prompt('Nhập tổng hóa đơn trước giảm giá (VNĐ):','');
+if(billRaw===null)return;const bill=Number(billRaw.replace(/[^0-9]/g,''));
+if(!Number.isFinite(bill)||bill<=0){toast('Hóa đơn không hợp lệ.');return}
+const discount=Math.round(bill*p/100),pay=Math.max(0,bill-discount);
+if(!confirm('Đổi '+p+' điểm = giảm '+p+'%\nHóa đơn: '+money(bill)+'\nGiảm: '+money(discount)+'\nKhách trả: '+money(pay)+'\nĐiểm còn: '+(c.points-p)+'\n\nXác nhận đổi điểm?'))return;
+c.points-=p;addTxn(c,'redeem',-p,{bill,discount,percent:p});save();toast('Đã đổi '+p+' điểm.');if(selectedCustomer===id)showCustomer(id);
+}
+function txnHTML(t){
+const c=customer(t.customerId),earn=t.kind==='earn';
+let detail=earn?'Hoàn thành dịch vụ':('Đổi '+Math.abs(t.points)+' điểm · giảm '+(t.percent||Math.abs(t.points))+'%');
+if(t.kind==='redeem')detail+=' · giảm '+money(t.discount)+' trên hóa đơn '+money(t.bill);
+return '<div class="txn"><div class="grow"><div class="name">'+esc(c?c.name:'Khách hàng đã xóa')+'</div><div class="muted">'+detail+' · '+dateText(t.createdAt)+'</div></div><div class="'+(earn?'positive':'negative')+'">'+(t.points>0?'+':'')+t.points+'</div></div>';
+}
+function renderHistory(){
+const q=$('historySearch').value.trim().toLowerCase();
+const list=db.transactions.filter(t=>{const c=customer(t.customerId);return !q||(c&&(c.name.toLowerCase().includes(q)||c.phone.includes(q)))});
+$('historyList').innerHTML=list.length?list.map(txnHTML).join(''):'<div class="empty">Chưa có giao dịch phù hợp.</div>';
+}
+$('historySearch').oninput=renderHistory;
+$('exportData').onclick=()=>{
+const blob=new Blob([JSON.stringify({...db,exportedAt:new Date().toISOString(),app:'Nifnail Loyalty'},null,2)],{type:'application/json'});
+const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='nifnail-loyalty-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href);toast('Đã xuất bản sao dữ liệu.');
+};
+$('importData').onclick=()=>$('importFile').click();
+$('importFile').onchange=async e=>{
+const f=e.target.files[0];if(!f)return;
+try{const x=JSON.parse(await f.text());if(!Array.isArray(x.customers)||!Array.isArray(x.transactions))throw Error('bad');
+if(!confirm('Nhập bản sao sẽ thay thế dữ liệu hiện tại trên thiết bị. Tiếp tục?'))return;
+db={customers:x.customers,transactions:x.transactions};save();toast('Đã khôi phục dữ liệu.');
+}catch(err){toast('File sao lưu không hợp lệ.')}finally{e.target.value=''}
+};
+function renderAll(){renderHome();renderCustomers();renderEarnResults();renderHistory();if(selectedCustomer)showCustomer(selectedCustomer)}
+load();renderAll();
+if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+</script>
+</body></html>
